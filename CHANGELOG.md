@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/bffless/compare-coverage/compare/v1.0.3...v1.0.4) (2026-02-21)
+
+
+### Bug Fixes
+
+* comment signature ([24ead96](https://github.com/bffless/compare-coverage/commit/24ead96938910d9b5186569cc154f8d2064df6ec))
+
 ## [1.0.3](https://github.com/bffless/compare-coverage/compare/v1.0.2...v1.0.3) (2026-02-21)
 
 
