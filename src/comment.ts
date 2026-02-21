@@ -94,8 +94,15 @@ export async function postPRComment(
   }
 
   // Footer
-  body +=
-    '<p align="right"><img src="https://bffless.app/images/logo-circle.svg" width="20" height="20" align="absmiddle" /> <sub><a href="https://github.com/bffless/compare-coverage">BFFLESS</a></sub></p>';
+  body += '---\n\n';
+  body += '<table><tr>\n';
+  body += '<td width="96"><img src="https://bffless.app/images/logo-circle.svg" width="96" height="96" /></td>\n';
+  body += '<td valign="top">\n';
+  body += '<strong><a href="https://bffless.app">BFFless</a></strong><br/>\n';
+  body += 'The BFF your frontend deserves<br/>\n';
+  body += '<a href="https://github.com/bffless/compare-coverage">bffless/compare-coverage</a>\n';
+  body += '</td>\n';
+  body += '</tr></table>';
 
   // Find existing comment by header
   const [owner, repo] = context.repository.split('/');

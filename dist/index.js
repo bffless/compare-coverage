@@ -32955,8 +32955,15 @@ async function postPRComment(report, inputs, context, uploadResult) {
         body += `**Coverage Report:** [View on BFFLESS](${uploadResult.uploadUrl})\n\n`;
     }
     // Footer
-    body +=
-        '<p align="right"><img src="https://bffless.app/images/logo-circle.svg" width="20" height="20" align="absmiddle" /> <sub><a href="https://github.com/bffless/compare-coverage">BFFLESS</a></sub></p>';
+    body += '---\n\n';
+    body += '<table><tr>\n';
+    body += '<td width="96"><img src="https://bffless.app/images/logo-circle.svg" width="96" height="96" /></td>\n';
+    body += '<td valign="top">\n';
+    body += '<strong><a href="https://bffless.app">BFFless</a></strong><br/>\n';
+    body += 'The BFF your frontend deserves<br/>\n';
+    body += '<a href="https://github.com/bffless/compare-coverage">bffless/compare-coverage</a>\n';
+    body += '</td>\n';
+    body += '</tr></table>';
     // Find existing comment by header
     const [owner, repo] = context.repository.split('/');
     const { data: comments } = await octokit.rest.issues.listComments({
@@ -34935,6 +34942,16 @@ async function generateSummary(report, inputs, context, uploadResult) {
         md += '### Uploaded Results\n\n';
         md += `- [View Coverage on BFFLESS](${uploadResult.uploadUrl})\n`;
     }
+    // Footer
+    md += '---\n\n';
+    md += '<table><tr>\n';
+    md += '<td width="96"><img src="https://bffless.app/images/logo-circle.svg" width="96" height="96" /></td>\n';
+    md += '<td valign="top">\n';
+    md += '<strong><a href="https://bffless.app">BFFless</a></strong><br/>\n';
+    md += 'The BFF your frontend deserves<br/>\n';
+    md += '<a href="https://github.com/bffless/compare-coverage">bffless/compare-coverage</a>\n';
+    md += '</td>\n';
+    md += '</tr></table>\n';
     await core.summary.addRaw(md).write();
 }
 /**
