@@ -229,4 +229,4 @@ npm run format
 
 ## License
 
-MIT
+[O'Saasy License](LICENSE.md)
