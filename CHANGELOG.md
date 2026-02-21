@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/bffless/compare-coverage/compare/v1.0.1...v1.0.2) (2026-02-21)
+
+
+### Bug Fixes
+
+* resolve coverage file in baseline directory ([5bb4782](https://github.com/bffless/compare-coverage/commit/5bb4782bd43d23fb7a22b3ac824b88caeb1bfd83))
+
 ## [1.0.1](https://github.com/bffless/compare-coverage/compare/v1.0.0...v1.0.1) (2026-02-21)
 
 
