@@ -1,6 +1,6 @@
 {
   "name": "@bffless/compare-coverage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GitHub Action to compare test coverage reports against a BFFLESS baseline for coverage regression detection",
   "main": "dist/index.js",
   "scripts": {
