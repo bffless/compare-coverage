@@ -1,0 +1,99 @@
+name: 'BFFLESS Compare Coverage'
+description: 'Compare test coverage reports against a BFFLESS baseline for coverage regression detection'
+author: 'BFFLESS'
+
+branding:
+  icon: 'bar-chart-2'
+  color: 'green'
+
+inputs:
+  # Required
+  path:
+    description: 'Path to coverage report file'
+    required: true
+  baseline-alias:
+    description: 'BFFLESS alias containing baseline coverage'
+    required: true
+  api-url:
+    description: 'BFFLESS API URL'
+    required: true
+  api-key:
+    description: 'BFFLESS API key'
+    required: true
+
+  # Optional - Format
+  format:
+    description: 'Coverage format: lcov, istanbul, cobertura, clover, jacoco, or auto. Default: auto'
+    required: false
+    default: 'auto'
+
+  # Optional - Comparison
+  threshold:
+    description: 'Allowed regression percentage (0-100). Default: 0'
+    required: false
+    default: '0'
+
+  # Optional - Upload
+  upload-results:
+    description: 'Upload current coverage to BFFLESS. Default: true'
+    required: false
+    default: 'true'
+  alias:
+    description: 'Alias for uploaded coverage. Default: preview'
+    required: false
+    default: 'preview'
+
+  # Optional - Repository context
+  repository:
+    description: 'Repository in owner/repo format. Default: current repository'
+    required: false
+
+  # Optional - Behavior
+  fail-on-regression:
+    description: 'Fail the action if coverage regresses beyond threshold. Default: true'
+    required: false
+    default: 'true'
+  summary:
+    description: 'Generate GitHub step summary. Default: true'
+    required: false
+    default: 'true'
+
+  # Optional - PR Comment
+  comment:
+    description: 'Post a comment on the PR with results. Default: true'
+    required: false
+    default: 'true'
+  comment-header:
+    description: 'Header text to identify the comment (for updates). Default: ## Coverage Report'
+    required: false
+    default: '## Coverage Report'
+
+outputs:
+  statements:
+    description: 'Statement coverage percentage'
+  branches:
+    description: 'Branch coverage percentage'
+  functions:
+    description: 'Function coverage percentage'
+  lines:
+    description: 'Line coverage percentage'
+  statements-delta:
+    description: 'Statement coverage change vs baseline'
+  branches-delta:
+    description: 'Branch coverage change vs baseline'
+  functions-delta:
+    description: 'Function coverage change vs baseline'
+  lines-delta:
+    description: 'Line coverage change vs baseline'
+  result:
+    description: 'Overall result: pass, fail, or improved'
+  report:
+    description: 'JSON report contents'
+  baseline-commit-sha:
+    description: 'Commit SHA of the baseline coverage'
+  upload-url:
+    description: 'URL to uploaded coverage (if upload-results: true)'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1640000000" clover="4.4.0">
+  <project timestamp="1640000000" name="test-project">
+    <metrics statements="20" coveredstatements="15" conditionals="8" coveredconditionals="6" methods="4" coveredmethods="3" elements="32" coveredelements="24" complexity="10" loc="100" ncloc="80" packages="1" files="2" classes="2"/>
+    <package name="src">
+      <metrics statements="20" coveredstatements="15" conditionals="8" coveredconditionals="6" methods="4" coveredmethods="3"/>
+      <file name="index.ts" path="src/index.ts">
+        <metrics statements="12" coveredstatements="10" conditionals="4" coveredconditionals="3" methods="2" coveredmethods="2"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="3" count="5" type="cond" truecount="3" falsecount="1"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="10" count="5" type="method"/>
+        <line num="20" count="3" type="method"/>
+      </file>
+      <file name="utils.ts" path="src/utils.ts">
+        <metrics statements="8" coveredstatements="5" conditionals="4" coveredconditionals="3" methods="2" coveredmethods="1"/>
+        <line num="1" count="10" type="stmt"/>
+        <line num="2" count="10" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="5" count="10" type="method"/>
+        <line num="10" count="0" type="method"/>
+      </file>
+    </package>
+  </project>
+</coverage>
