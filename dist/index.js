@@ -33262,6 +33262,49 @@ const os = __importStar(__nccwpck_require__(857));
 const api_1 = __nccwpck_require__(7822);
 const parse_1 = __nccwpck_require__(3229);
 /**
+ * Common coverage file names to look for when a directory is provided
+ */
+const COMMON_COVERAGE_FILES = [
+    'lcov.info',
+    'coverage.lcov',
+    'coverage-final.json',
+    'coverage.json',
+    'cobertura.xml',
+    'cobertura-coverage.xml',
+    'coverage.xml',
+    'clover.xml',
+    'jacoco.xml',
+    'jacocoTestReport.xml',
+];
+/**
+ * Find coverage file in a directory
+ */
+function findCoverageFile(dirPath) {
+    for (const filename of COMMON_COVERAGE_FILES) {
+        const filePath = path.join(dirPath, filename);
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            return filePath;
+        }
+    }
+    return null;
+}
+/**
+ * Resolve the coverage file path - handles both files and directories
+ */
+function resolveCoveragePath(inputPath) {
+    if (!fs.existsSync(inputPath)) {
+        return null;
+    }
+    const stat = fs.statSync(inputPath);
+    if (stat.isFile()) {
+        return inputPath;
+    }
+    if (stat.isDirectory()) {
+        return findCoverageFile(inputPath);
+    }
+    return null;
+}
+/**
  * Download baseline coverage from BFFLESS
  */
 async function downloadBaseline(inputs, context) {
@@ -33317,9 +33360,11 @@ async function downloadBaseline(inputs, context) {
     // Parse the downloaded coverage file
     let coverage;
     if (downloadResults.success.length > 0) {
-        // Find the coverage file (should match the input path)
-        const coverageFilePath = path.join(tempDir, baselinePath);
-        if (fs.existsSync(coverageFilePath)) {
+        // Find the coverage file (handles both file and directory paths)
+        const baseCoveragePath = path.join(tempDir, baselinePath);
+        const coverageFilePath = resolveCoveragePath(baseCoveragePath);
+        if (coverageFilePath) {
+            core.info(`Found baseline coverage file: ${path.basename(coverageFilePath)}`);
             const content = fs.readFileSync(coverageFilePath, 'utf-8');
             const filename = path.basename(coverageFilePath);
             try {
@@ -33331,7 +33376,8 @@ async function downloadBaseline(inputs, context) {
             }
         }
         else {
-            core.warning(`Baseline coverage file not found at: ${coverageFilePath}`);
+            core.warning(`Baseline coverage file not found at: ${baseCoveragePath}\n` +
+                `Looked for: ${COMMON_COVERAGE_FILES.join(', ')}`);
         }
     }
     return {
