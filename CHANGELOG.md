@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/bffless/compare-coverage/compare/v1.0.2...v1.0.3) (2026-02-21)
+
+
+### Bug Fixes
+
+* look for coverage files in tempDir root ([f354406](https://github.com/bffless/compare-coverage/commit/f3544065e7df8d1a5407267d5bd22ed4058586a9))
+
 ## [1.0.2](https://github.com/bffless/compare-coverage/compare/v1.0.1...v1.0.2) (2026-02-21)
 
 
