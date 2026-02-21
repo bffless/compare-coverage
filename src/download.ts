@@ -7,7 +7,7 @@ import {
   requestPrepareBatchDownload,
   downloadFilesWithPresignedUrls,
   downloadFilesDirect,
-} from './api';
+} from '@bffless/artifact-client';
 import { parseBaselineCoverage } from './parse';
 
 /**

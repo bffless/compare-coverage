@@ -1,8 +1,13 @@
 import * as core from '@actions/core';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ActionInputs, GitContext, UploadResult, FileInfo } from './types';
-import { requestPrepareBatchUpload, uploadFilesWithPresignedUrls, finalizeUpload } from './api';
+import { ActionInputs, GitContext, UploadResult } from './types';
+import {
+  requestPrepareBatchUpload,
+  uploadFilesWithPresignedUrls,
+  finalizeUpload,
+  FileInfo,
+} from '@bffless/artifact-client';
 import * as mimeTypes from 'mime-types';
 
 /**
