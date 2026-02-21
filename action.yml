@@ -9,7 +9,7 @@ branding:
 inputs:
   # Required
   path:
-    description: 'Path to coverage report file'
+    description: 'Path to coverage report file or directory (auto-finds coverage file in directory)'
     required: true
   baseline-alias:
     description: 'BFFLESS alias containing baseline coverage'

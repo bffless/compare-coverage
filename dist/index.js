@@ -33798,17 +33798,70 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseLocalCoverage = parseLocalCoverage;
 exports.parseBaselineCoverage = parseBaselineCoverage;
 const core = __importStar(__nccwpck_require__(6966));
+const fs = __importStar(__nccwpck_require__(9896));
 const path = __importStar(__nccwpck_require__(6928));
 const files_1 = __nccwpck_require__(5713);
 const parsers_1 = __nccwpck_require__(1961);
 /**
+ * Common coverage file names to look for when a directory is provided
+ */
+const COMMON_COVERAGE_FILES = [
+    'lcov.info',
+    'coverage.lcov',
+    'coverage-final.json',
+    'coverage.json',
+    'cobertura.xml',
+    'cobertura-coverage.xml',
+    'coverage.xml',
+    'clover.xml',
+    'jacoco.xml',
+    'jacocoTestReport.xml',
+];
+/**
+ * Find coverage file in a directory
+ */
+function findCoverageFile(dirPath) {
+    for (const filename of COMMON_COVERAGE_FILES) {
+        const filePath = path.join(dirPath, filename);
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            return filePath;
+        }
+    }
+    return null;
+}
+/**
+ * Resolve the coverage file path - handles both files and directories
+ */
+function resolveCoveragePath(inputPath) {
+    const resolvedPath = path.resolve(inputPath);
+    if (!fs.existsSync(resolvedPath)) {
+        throw new Error(`Path does not exist: ${resolvedPath}`);
+    }
+    const stat = fs.statSync(resolvedPath);
+    if (stat.isFile()) {
+        return resolvedPath;
+    }
+    if (stat.isDirectory()) {
+        core.info(`Path is a directory, searching for coverage file...`);
+        const coverageFile = findCoverageFile(resolvedPath);
+        if (coverageFile) {
+            core.info(`Found coverage file: ${path.basename(coverageFile)}`);
+            return coverageFile;
+        }
+        throw new Error(`No coverage file found in directory: ${resolvedPath}\n` +
+            `Looked for: ${COMMON_COVERAGE_FILES.join(', ')}\n` +
+            `Please specify the full path to your coverage file.`);
+    }
+    throw new Error(`Path is not a file or directory: ${resolvedPath}`);
+}
+/**
  * Parse coverage file from local filesystem
  */
 async function parseLocalCoverage(inputs) {
-    const filePath = (0, files_1.validateFile)(inputs.path);
+    const filePath = resolveCoveragePath(inputs.path);
     const content = (0, files_1.readFileContents)(filePath);
     const filename = path.basename(filePath);
-    core.info(`Parsing coverage file: ${inputs.path}`);
+    core.info(`Parsing coverage file: ${filePath}`);
     const coverage = await (0, parsers_1.parseCoverage)(content, filename, inputs.format);
     const format = inputs.format === 'auto' ? (0, parsers_1.detectFormat)(content, filename) : inputs.format;
     core.info(`Detected format: ${format}`);

@@ -6,6 +6,7 @@ A GitHub Action to compare test coverage reports against a BFFLESS baseline for 
 
 - **Multiple Coverage Formats**: Supports LCOV, Istanbul, Cobertura, Clover, and JaCoCo
 - **Auto-Detection**: Automatically detects coverage format from file extension or content
+- **Directory Support**: Pass a directory and the action finds the coverage file automatically
 - **PR Comments**: Posts coverage comparison as a PR comment
 - **GitHub Summaries**: Generates step summaries with detailed metrics
 - **Threshold Control**: Configure allowed regression percentage
@@ -29,7 +30,7 @@ A GitHub Action to compare test coverage reports against a BFFLESS baseline for 
 
 | Input | Required | Default | Description |
 |-------|----------|---------|-------------|
-| `path` | **Yes** | - | Path to coverage report file |
+| `path` | **Yes** | - | Path to coverage report file or directory (auto-finds coverage file) |
 | `baseline-alias` | **Yes** | - | BFFLESS alias for baseline coverage |
 | `api-url` | **Yes** | - | BFFLESS API URL |
 | `api-key` | **Yes** | - | BFFLESS API key |
@@ -68,6 +69,25 @@ A GitHub Action to compare test coverage reports against a BFFLESS baseline for 
 | **cobertura** | `.xml` | Python (coverage.py), .NET, PHPUnit |
 | **clover** | `.xml` | PHP (PHPUnit), Java |
 | **jacoco** | `.xml` | Java, Kotlin, Scala |
+
+## Path Resolution
+
+The `path` input accepts either a file or directory:
+
+```yaml
+# Direct file path
+path: ./coverage/lcov.info
+
+# Directory - action will find the coverage file
+path: ./coverage
+```
+
+When a directory is provided, the action searches for these files (in order):
+- `lcov.info`, `coverage.lcov`
+- `coverage-final.json`, `coverage.json`
+- `cobertura.xml`, `cobertura-coverage.xml`, `coverage.xml`
+- `clover.xml`
+- `jacoco.xml`, `jacocoTestReport.xml`
 
 ## Examples
 
