@@ -33360,9 +33360,9 @@ async function downloadBaseline(inputs, context) {
     // Parse the downloaded coverage file
     let coverage;
     if (downloadResults.success.length > 0) {
-        // Find the coverage file (handles both file and directory paths)
-        const baseCoveragePath = path.join(tempDir, baselinePath);
-        const coverageFilePath = resolveCoveragePath(baseCoveragePath);
+        // Files are downloaded relative to the requested path, so they're directly in tempDir
+        // e.g., if we request "coverage", files come back as "coverage-final.json" not "coverage/coverage-final.json"
+        const coverageFilePath = resolveCoveragePath(tempDir);
         if (coverageFilePath) {
             core.info(`Found baseline coverage file: ${path.basename(coverageFilePath)}`);
             const content = fs.readFileSync(coverageFilePath, 'utf-8');
@@ -33376,7 +33376,8 @@ async function downloadBaseline(inputs, context) {
             }
         }
         else {
-            core.warning(`Baseline coverage file not found at: ${baseCoveragePath}\n` +
+            core.warning(`Baseline coverage file not found in: ${tempDir}\n` +
+                `Downloaded files: ${downloadResults.success.slice(0, 5).join(', ')}${downloadResults.success.length > 5 ? '...' : ''}\n` +
                 `Looked for: ${COMMON_COVERAGE_FILES.join(', ')}`);
         }
     }
