@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/bffless/compare-coverage/compare/v1.0.4...v1.1.0) (2026-02-21)
+
+
+### Features
+
+* uses @bffless/artifact-client ([14a5ea5](https://github.com/bffless/compare-coverage/commit/14a5ea5e2d08e9fda041d084ad27284ddc07af61))
+
 ## [1.0.4](https://github.com/bffless/compare-coverage/compare/v1.0.3...v1.0.4) (2026-02-21)
 
 
