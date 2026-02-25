@@ -28,47 +28,47 @@ A GitHub Action to compare test coverage reports against a BFFLESS baseline for 
 
 ### Inputs
 
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `path` | **Yes** | - | Path to coverage report file or directory (auto-finds coverage file) |
-| `baseline-alias` | **Yes** | - | BFFLESS alias for baseline coverage |
-| `api-url` | **Yes** | - | BFFLESS API URL |
-| `api-key` | **Yes** | - | BFFLESS API key |
-| `format` | No | `auto` | Coverage format: `lcov`, `istanbul`, `cobertura`, `clover`, `jacoco`, or `auto` |
-| `threshold` | No | `0` | Allowed regression % (0 = any regression fails) |
-| `upload-results` | No | `true` | Upload current coverage to BFFLESS |
-| `alias` | No | `preview` | Alias for uploaded coverage |
-| `fail-on-regression` | No | `true` | Fail action if coverage regresses |
-| `summary` | No | `true` | Generate GitHub step summary |
-| `comment` | No | `true` | Post PR comment |
-| `comment-header` | No | `## Coverage Report` | PR comment header |
+| Input                | Required | Default              | Description                                                                     |
+| -------------------- | -------- | -------------------- | ------------------------------------------------------------------------------- |
+| `path`               | **Yes**  | -                    | Path to coverage report file or directory (auto-finds coverage file)            |
+| `baseline-alias`     | **Yes**  | -                    | BFFLESS alias for baseline coverage                                             |
+| `api-url`            | **Yes**  | -                    | BFFLESS API URL                                                                 |
+| `api-key`            | **Yes**  | -                    | BFFLESS API key                                                                 |
+| `format`             | No       | `auto`               | Coverage format: `lcov`, `istanbul`, `cobertura`, `clover`, `jacoco`, or `auto` |
+| `threshold`          | No       | `0`                  | Allowed regression % (0 = any regression fails)                                 |
+| `upload-results`     | No       | `true`               | Upload current coverage to BFFLESS                                              |
+| `alias`              | No       | `preview`            | Alias for uploaded coverage                                                     |
+| `fail-on-regression` | No       | `true`               | Fail action if coverage regresses                                               |
+| `summary`            | No       | `true`               | Generate GitHub step summary                                                    |
+| `comment`            | No       | `true`               | Post PR comment                                                                 |
+| `comment-header`     | No       | `## Coverage Report` | PR comment header                                                               |
 
 ### Outputs
 
-| Output | Description |
-|--------|-------------|
-| `statements` | Statement coverage % |
-| `branches` | Branch coverage % |
-| `functions` | Function coverage % |
-| `lines` | Line coverage % |
-| `statements-delta` | Change vs baseline |
-| `branches-delta` | Change vs baseline |
-| `functions-delta` | Change vs baseline |
-| `lines-delta` | Change vs baseline |
-| `result` | Overall: `pass`, `fail`, `improved` |
-| `report` | JSON report contents |
-| `baseline-commit-sha` | Baseline commit SHA |
-| `upload-url` | URL to uploaded coverage |
+| Output                | Description                         |
+| --------------------- | ----------------------------------- |
+| `statements`          | Statement coverage %                |
+| `branches`            | Branch coverage %                   |
+| `functions`           | Function coverage %                 |
+| `lines`               | Line coverage %                     |
+| `statements-delta`    | Change vs baseline                  |
+| `branches-delta`      | Change vs baseline                  |
+| `functions-delta`     | Change vs baseline                  |
+| `lines-delta`         | Change vs baseline                  |
+| `result`              | Overall: `pass`, `fail`, `improved` |
+| `report`              | JSON report contents                |
+| `baseline-commit-sha` | Baseline commit SHA                 |
+| `upload-url`          | URL to uploaded coverage            |
 
 ## Supported Coverage Formats
 
-| Format | File Types | Used By |
-|--------|------------|---------|
-| **lcov** | `.info`, `.lcov` | Jest, c8, nyc, gcov, Vitest |
-| **istanbul** | `coverage-final.json` | Jest, nyc, Istanbul |
-| **cobertura** | `.xml` | Python (coverage.py), .NET, PHPUnit |
-| **clover** | `.xml` | PHP (PHPUnit), Java |
-| **jacoco** | `.xml` | Java, Kotlin, Scala |
+| Format        | File Types            | Used By                             |
+| ------------- | --------------------- | ----------------------------------- |
+| **lcov**      | `.info`, `.lcov`      | Jest, c8, nyc, gcov, Vitest         |
+| **istanbul**  | `coverage-final.json` | Jest, nyc, Istanbul                 |
+| **cobertura** | `.xml`                | Python (coverage.py), .NET, PHPUnit |
+| **clover**    | `.xml`                | PHP (PHPUnit), Java                 |
+| **jacoco**    | `.xml`                | Java, Kotlin, Scala                 |
 
 ## Path Resolution
 
@@ -83,6 +83,7 @@ path: ./coverage
 ```
 
 When a directory is provided, the action searches for these files (in order):
+
 - `lcov.info`, `coverage.lcov`
 - `coverage-final.json`, `coverage.json`
 - `cobertura.xml`, `cobertura-coverage.xml`, `coverage.xml`
@@ -158,7 +159,7 @@ When a directory is provided, the action searches for these files (in order):
     baseline-alias: coverage-production
     api-url: ${{ vars.BFFLESS_URL }}
     api-key: ${{ secrets.BFFLESS_API_KEY }}
-    threshold: 1  # Allow up to 1% regression
+    threshold: 1 # Allow up to 1% regression
 ```
 
 ### Use Coverage in Subsequent Steps
@@ -174,7 +175,7 @@ When a directory is provided, the action searches for these files (in order):
     baseline-alias: coverage-production
     api-url: ${{ vars.BFFLESS_URL }}
     api-key: ${{ secrets.BFFLESS_API_KEY }}
-    fail-on-regression: false  # Don't fail, handle in next step
+    fail-on-regression: false # Don't fail, handle in next step
 
 - name: Check coverage result
   run: |
@@ -191,25 +192,32 @@ When a directory is provided, the action searches for these files (in order):
 
 The action posts a comment like this on pull requests:
 
-```
+![Coverage Report Comment](assets/coverage-comment.png)
+
+<details>
+<summary>Comment Markdown</summary>
+
+```markdown
 ## Coverage Report
 
-> [!TIP]
-> Coverage improved by **+2.4%** overall
+> [!WARNING]
+> Coverage regressed by -0.6% overall
 
-| Metric | Baseline | Current | Delta |
-|:-------|:--------:|:-------:|------:|
-| Statements | 78.2% | 80.6% | **+2.4%** |
-| Branches | 65.1% | 66.9% | **+1.8%** |
-| Functions | 82.3% | 84.1% | **+1.8%** |
-| Lines | 79.5% | 79.3% | -0.2% |
+| Metric     | Baseline | Current | Delta |
+| :--------- | :------: | :-----: | ----: |
+| Statements |  21.3%   |  20.2%  | -1.1% |
+| Branches   |  77.3%   |  77.3%  |  0.0% |
+| Functions  |  28.6%   |  28.6%  |  0.0% |
+| Lines      |  21.3%   |  20.2%  | -1.1% |
 
 <table>
-<tr><td><strong>Baseline</strong></td><td><code>coverage-production</code> @ <code>c35aeb8</code></td></tr>
-<tr><td><strong>Current</strong></td><td><code>cf089de</code></td></tr>
+<tr><td><strong>Baseline</strong></td><td><code>coverage-production</code> @ <code>5d1a4e2</code></td></tr>
+<tr><td><strong>Current</strong></td><td><code>d4856e2</code></td></tr>
 <tr><td><strong>Threshold</strong></td><td>0%</td></tr>
 </table>
 ```
+
+</details>
 
 ## Development
 
