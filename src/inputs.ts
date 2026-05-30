@@ -10,6 +10,10 @@ export function getInputs(): ActionInputs {
   const apiKey = core.getInput('api-key', { required: true });
   core.setSecret(apiKey);
 
+  // Optional baseline-path: subpath within the alias to look for the coverage file/dir
+  const baselinePathInput = core.getInput('baseline-path');
+  const baselinePath = baselinePathInput ? baselinePathInput.trim() : undefined;
+
   // Format option
   const formatInput = core.getInput('format') || 'auto';
   const validFormats = ['auto', 'lcov', 'istanbul', 'cobertura', 'clover', 'jacoco'];
@@ -51,6 +55,7 @@ export function getInputs(): ActionInputs {
     baselineAlias,
     apiUrl,
     apiKey,
+    baselinePath,
     format,
     threshold,
     uploadResults,

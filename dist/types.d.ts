@@ -3,6 +3,7 @@ export interface ActionInputs {
     baselineAlias: string;
     apiUrl: string;
     apiKey: string;
+    baselinePath?: string;
     format: CoverageFormat | 'auto';
     threshold: number;
     uploadResults: boolean;

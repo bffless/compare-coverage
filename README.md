@@ -34,6 +34,7 @@ A GitHub Action to compare test coverage reports against a BFFLESS baseline for 
 | `baseline-alias`     | **Yes**  | -                    | BFFLESS alias for baseline coverage                                             |
 | `api-url`            | **Yes**  | -                    | BFFLESS API URL                                                                 |
 | `api-key`            | **Yes**  | -                    | BFFLESS API key                                                                 |
+| `baseline-path`      | No       | -                    | Subpath within the baseline alias to the coverage file/dir (e.g. `coverage/lcov.info`). Use when the alias serves more than just the coverage file at its root. |
 | `format`             | No       | `auto`               | Coverage format: `lcov`, `istanbul`, `cobertura`, `clover`, `jacoco`, or `auto` |
 | `threshold`          | No       | `0`                  | Allowed regression % (0 = any regression fails)                                 |
 | `upload-results`     | No       | `true`               | Upload current coverage to BFFLESS                                              |
@@ -89,6 +90,27 @@ When a directory is provided, the action searches for these files (in order):
 - `cobertura.xml`, `cobertura-coverage.xml`, `coverage.xml`
 - `clover.xml`
 - `jacoco.xml`, `jacocoTestReport.xml`
+
+### Baseline path
+
+The action downloads the contents of `baseline-alias` and, by default, looks for one of the filenames above at the **root** of what was downloaded.
+
+If the alias contains more than just the coverage file (e.g. a full site with the lcov nested under `coverage/`), point the action at the right subpath with `baseline-path`:
+
+```yaml
+- name: Compare coverage
+  uses: bffless/compare-coverage@v1
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  with:
+    path: ./coverage/lcov.info
+    baseline-alias: production
+    baseline-path: coverage/lcov.info
+    api-url: ${{ vars.BFFLESS_URL }}
+    api-key: ${{ secrets.BFFLESS_API_KEY }}
+```
+
+`baseline-path` accepts either a file (used directly) or a directory (searched for the filenames listed above).
 
 ## Examples
 
