@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/bffless/compare-coverage/compare/v1.1.0...v1.2.0) (2026-05-30)
+
+
+### Features
+
+* add baseline-path input for nested baseline files ([9d3df93](https://github.com/bffless/compare-coverage/commit/9d3df933278907e6dac66d36818c886b51315751))
+
 ## [1.1.0](https://github.com/bffless/compare-coverage/compare/v1.0.4...v1.1.0) (2026-02-21)
 
 
