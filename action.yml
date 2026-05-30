@@ -14,6 +14,9 @@ inputs:
   baseline-alias:
     description: 'BFFLESS alias containing baseline coverage'
     required: true
+  baseline-path:
+    description: 'Path within the baseline alias to the coverage file or directory (e.g. "coverage/lcov.info"). Use when the baseline alias serves more than just the coverage file at its root. Default: search for a known coverage filename at the alias root.'
+    required: false
   api-url:
     description: 'BFFLESS API URL'
     required: true

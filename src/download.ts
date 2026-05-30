@@ -142,9 +142,12 @@ export async function downloadBaseline(
   let coverage: NormalizedCoverage | undefined;
 
   if (downloadResults.success.length > 0) {
-    // Files are downloaded relative to the requested path, so they're directly in tempDir
-    // e.g., if we request "coverage", files come back as "coverage-final.json" not "coverage/coverage-final.json"
-    const coverageFilePath = resolveCoveragePath(tempDir);
+    // If baseline-path is provided, look there explicitly (file or dir).
+    // Otherwise scan the tempDir root for a known coverage filename.
+    const searchRoot = inputs.baselinePath
+      ? path.join(tempDir, inputs.baselinePath.replace(/^\.?\/+/, ''))
+      : tempDir;
+    const coverageFilePath = resolveCoveragePath(searchRoot);
 
     if (coverageFilePath) {
       core.info(`Found baseline coverage file: ${path.basename(coverageFilePath)}`);
@@ -161,9 +164,12 @@ export async function downloadBaseline(
       }
     } else {
       core.warning(
-        `Baseline coverage file not found in: ${tempDir}\n` +
+        `Baseline coverage file not found in: ${searchRoot}\n` +
           `Downloaded files: ${downloadResults.success.slice(0, 5).join(', ')}${downloadResults.success.length > 5 ? '...' : ''}\n` +
-          `Looked for: ${COMMON_COVERAGE_FILES.join(', ')}`,
+          `Looked for: ${COMMON_COVERAGE_FILES.join(', ')}` +
+          (inputs.baselinePath
+            ? ''
+            : '\nHint: if your baseline alias serves more than just the coverage file at its root, set the `baseline-path` input (e.g. `coverage/lcov.info`).'),
       );
     }
   }

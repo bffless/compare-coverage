@@ -6,6 +6,9 @@ export interface ActionInputs {
   apiUrl: string;
   apiKey: string;
 
+  // Baseline location
+  baselinePath?: string;
+
   // Format
   format: CoverageFormat | 'auto';
 

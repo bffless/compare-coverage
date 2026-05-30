@@ -33510,9 +33510,12 @@ async function downloadBaseline(inputs, context) {
     // Parse the downloaded coverage file
     let coverage;
     if (downloadResults.success.length > 0) {
-        // Files are downloaded relative to the requested path, so they're directly in tempDir
-        // e.g., if we request "coverage", files come back as "coverage-final.json" not "coverage/coverage-final.json"
-        const coverageFilePath = resolveCoveragePath(tempDir);
+        // If baseline-path is provided, look there explicitly (file or dir).
+        // Otherwise scan the tempDir root for a known coverage filename.
+        const searchRoot = inputs.baselinePath
+            ? path.join(tempDir, inputs.baselinePath.replace(/^\.?\/+/, ''))
+            : tempDir;
+        const coverageFilePath = resolveCoveragePath(searchRoot);
         if (coverageFilePath) {
             core.info(`Found baseline coverage file: ${path.basename(coverageFilePath)}`);
             const content = fs.readFileSync(coverageFilePath, 'utf-8');
@@ -33526,9 +33529,12 @@ async function downloadBaseline(inputs, context) {
             }
         }
         else {
-            core.warning(`Baseline coverage file not found in: ${tempDir}\n` +
+            core.warning(`Baseline coverage file not found in: ${searchRoot}\n` +
                 `Downloaded files: ${downloadResults.success.slice(0, 5).join(', ')}${downloadResults.success.length > 5 ? '...' : ''}\n` +
-                `Looked for: ${COMMON_COVERAGE_FILES.join(', ')}`);
+                `Looked for: ${COMMON_COVERAGE_FILES.join(', ')}` +
+                (inputs.baselinePath
+                    ? ''
+                    : '\nHint: if your baseline alias serves more than just the coverage file at its root, set the `baseline-path` input (e.g. `coverage/lcov.info`).'));
         }
     }
     return {
@@ -33904,6 +33910,9 @@ function getInputs() {
     const apiUrl = core.getInput('api-url', { required: true });
     const apiKey = core.getInput('api-key', { required: true });
     core.setSecret(apiKey);
+    // Optional baseline-path: subpath within the alias to look for the coverage file/dir
+    const baselinePathInput = core.getInput('baseline-path');
+    const baselinePath = baselinePathInput ? baselinePathInput.trim() : undefined;
     // Format option
     const formatInput = core.getInput('format') || 'auto';
     const validFormats = ['auto', 'lcov', 'istanbul', 'cobertura', 'clover', 'jacoco'];
@@ -33938,6 +33947,7 @@ function getInputs() {
         baselineAlias,
         apiUrl,
         apiKey,
+        baselinePath,
         format,
         threshold,
         uploadResults,
